@@ -2,8 +2,10 @@
 
 [ filter_out.py ]
 
-    This program is to filter out some lines which start with specific keywords.
-  
+    - This program is to filter out some lines which start with specific keywords.
+
+    - Env : Python 2.7.17
+
 """
 
 # Adjust keyword list as you want
