@@ -25,18 +25,20 @@ if __name__ == '__main__':
 
 ## Parsing
 
-### Get File Extension
+### Get File's Name and Extension
    
 ```python
 #!/bin/python3
 
 import os.path
 
-file_name = "my_img.jpg"
+file_path = "/a/b/c/img/my_img.jpg"
 
-name_only = os.path.splitext(file_name)[0]
-extension = os.path.splitext(file_name)[1]
+base_name = os.path.basename(file_path)
+name_only = os.path.splitext(base_name)[0]
+extension = os.path.splitext(base_name)[1]
 
+print('base name :', base_name)
 print('name only :', name_only)
 print('extension :', extension)
 ```
