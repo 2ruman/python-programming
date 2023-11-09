@@ -35,10 +35,10 @@ import os.path
 file_path = "/a/b/c/img/my_img.jpg"
 
 base_name = os.path.basename(file_path)
-name_only = os.path.splitext(base_name)[0]
+file_name = os.path.splitext(base_name)[0]
 extension = os.path.splitext(base_name)[1]
 
-print('base name :', base_name)
-print('name only :', name_only)
-print('extension :', extension)
+print('Base name :', base_name)
+print('File name :', file_name)
+print('Extension :', extension)
 ```
