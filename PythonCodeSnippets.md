@@ -4,6 +4,7 @@
 ### Contents
 + [Basic](#basic)
 + [Parsing](#parsing)
++ [Input](#input)
 <br>
 
 ## Basic
@@ -41,4 +42,17 @@ extension = os.path.splitext(base_name)[1]
 print('Base name :', base_name)
 print('File name :', file_name)
 print('Extension :', extension)
+```
+
+## Input
+
+### Get Password
+
+```python
+#!/bin/python3
+
+import getpass
+
+pwd = getpass.getpass()
+pwd = getpass.getpass('Enter your password : ')
 ```
