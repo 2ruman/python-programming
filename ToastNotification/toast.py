@@ -1,11 +1,20 @@
 import customtkinter as ctk
 
-COLORS = {
-    "INFO": "#2196F3",
+_BASIC_COLORS = {
+    "INFO":    "#2196F3",
     "SUCCESS": "#4CAF50",
     "WARNING": "#FF9800",
-    "ERROR": "#F44336",
+    "ERROR":   "#F44336",
 }
+
+_MODERN_DARK_COLORS = {
+    "INFO":    "#1E2D3D",
+    "SUCCESS": "#1A2E22",
+    "WARNING": "#2E2210",
+    "ERROR":   "#2E1515",
+}
+
+COLORS = _MODERN_DARK_COLORS
 
 
 class ToastNotification:
