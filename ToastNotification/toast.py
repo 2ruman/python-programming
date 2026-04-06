@@ -21,6 +21,7 @@ class ToastNotification:
 
     _stack = []
     _single = False
+    _center = False
 
     def __init__(self, parent, message: str, duration: int = 2000, type: str = "INFO",
                  r_corner: bool = True):
@@ -82,8 +83,15 @@ class ToastNotification:
 
         if single is not None:
             if self.frame.winfo_exists():
-                wy -= self.frame.winfo_height()
-                self.win.geometry(f"+{wx}+{wy}")
+                if ToastNotification._center:
+                    tw = self.win.winfo_width()
+                    th = self.win.winfo_height()
+                    wx = px + (self.parent.winfo_width() - tw) // 2
+                    wy = py + (self.parent.winfo_height() - th) // 2
+                    self.win.geometry(f"+{wx}+{wy}")
+                else:
+                    wy -= self.frame.winfo_height()
+                    self.win.geometry(f"+{wx}+{wy}")
             return
 
         for t in reversed(ToastNotification._stack):
@@ -150,7 +158,14 @@ if __name__ == "__main__":
         ToastNotification._single = not ToastNotification._single
         toggle_btn.configure(text=f"Single: {'ON' if ToastNotification._single else 'OFF'}")
 
+    def toggle_center():
+        ToastNotification._center = not ToastNotification._center
+        center_btn.configure(text=f"Center: {'ON' if ToastNotification._center else 'OFF'}")
+
     toggle_btn = ctk.CTkButton(opts, text="Single: OFF", width=100, command=toggle_single)
     toggle_btn.pack(side="left", padx=(0, 8))
+
+    center_btn = ctk.CTkButton(opts, text="Center: OFF", width=100, command=toggle_center)
+    center_btn.pack(side="left", padx=(0, 8))
 
     app.mainloop()
