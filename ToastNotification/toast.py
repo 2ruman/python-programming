@@ -11,9 +11,15 @@ COLORS = {
 class ToastNotification:
 
     _stack = []
+    _single = False
 
     def __init__(self, parent, message: str, duration: int = 2000, type: str = "INFO",
                  r_corner: bool = True):
+        if ToastNotification._single:
+            for t in ToastNotification._stack[:]:
+                t.win.attributes("-alpha", 0.0)
+                t._destroy()
+
         self.parent = parent
         self.message = message
         self.duration = duration
@@ -56,14 +62,20 @@ class ToastNotification:
         self.win.update_idletasks()
 
         ToastNotification._stack.append(self)
-        self._reposition_all()
+        self._reposition_all(self if self._single else None)
         self._fade_in()
 
-    def _reposition_all(self):
+    def _reposition_all(self, single=None):
         px = self.parent.winfo_rootx()
         py = self.parent.winfo_rooty()
         wx = px + 4
         wy = py + self.parent.winfo_height() - 4
+
+        if single is not None:
+            if self.frame.winfo_exists():
+                wy -= self.frame.winfo_height()
+                self.win.geometry(f"+{wx}+{wy}")
+            return
 
         for t in reversed(ToastNotification._stack):
             wy -= t.frame.winfo_height()
@@ -101,6 +113,16 @@ if __name__ == "__main__":
     app.geometry("800x600")
     app.title("Toast Notification Test")
 
+    MESSAGES = {
+        "INFO": "Loading files...",
+        "SUCCESS": "File saved successfully.",
+        "WARNING":
+        "Storage is full: Free up space or change where new content is saved. "
+        "Storage is full: Free up space or change where new content is saved. "
+        "Storage is full: Free up space or change where new content is saved.",
+        "ERROR": "Network connection failed.",
+    }
+
     controls = ctk.CTkFrame(app, fg_color="transparent")
     controls.pack(pady=(20, 0))
     ctk.CTkLabel(controls, text="Toast -> ").pack(side="left", padx=8, pady=10)
@@ -108,15 +130,18 @@ if __name__ == "__main__":
                         ("WARNING", "Warning"), ("ERROR", "Error")]:
         ctk.CTkButton(
             controls, text=label, width=80,
-            command=lambda t=type: ToastNotification(app, {
-                "INFO": "Loading files...",
-                "SUCCESS": "File saved successfully.",
-                "WARNING":
-                "Storage is full: Free up space or change where new content is saved. "
-                "Storage is full: Free up space or change where new content is saved. "
-                "Storage is full: Free up space or change where new content is saved.",
-                "ERROR": "Network connection failed.",
-            }[t], type=t),
+            command=lambda t=type: ToastNotification(app, MESSAGES[t], type=t),
             ).pack(side="left", padx=(0, 8))
+
+    opts = ctk.CTkFrame(app, fg_color="transparent")
+    opts.pack(pady=(10, 0))
+    ctk.CTkLabel(opts, text="Single mode:").pack(side="left", padx=8, pady=8)
+
+    def toggle_single():
+        ToastNotification._single = not ToastNotification._single
+        toggle_btn.configure(text=f"Single: {'ON' if ToastNotification._single else 'OFF'}")
+
+    toggle_btn = ctk.CTkButton(opts, text="Single: OFF", width=100, command=toggle_single)
+    toggle_btn.pack(side="left", padx=(0, 8))
 
     app.mainloop()
